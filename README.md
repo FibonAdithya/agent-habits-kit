@@ -25,8 +25,8 @@ each with the failure it was written after.
   ([help](https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features)).
   For one project only: "Set project instructions" on the project page
   ([help](https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects)).
-- Gemini: Settings > Personal context > Your instructions for Gemini
-  ([help](https://support.google.com/gemini/answer/16598625?hl=en)). From 17 November 2026, Gems on
+- Gemini: Settings > Personal context > Your instructions for Gemini. The linked page lists a
+  Google AI plan as a requirement ([help](https://support.google.com/gemini/answer/16598625?hl=en)). From 17 November 2026, Gems on
   personal accounts become skills ([help](https://support.google.com/gemini/answer/15146780?hl=en)).
 - Any other tool: paste the list at the start of each conversation.
 
@@ -47,7 +47,8 @@ may skip a rule on a hard task, which is what habit 2 is for.
 
 ## 2. Prefer locks over requests.
 
-A request in the prompt is a sign: on a hard task it gets skipped. A lock removes the option.
+A request in the prompt is a sign: in my experience, it gets skipped on hard tasks. A lock removes
+the option.
 
 **In a chat tool**, there is nothing to lock in software, so remove the option yourself:
 

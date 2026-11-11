@@ -19,7 +19,7 @@ agent why and what to do instead, and the agent reads that message.
 |---|---|---|
 | `git add -A`, `git add .`, `git commit -a` | Saves everything in the folder, including build leftovers. | `# allow-git-add-all` |
 | `pkill`, `killall` | Stops every program with a matching name, which can include the agent's own session. | `# allow-kill-pattern` |
-| `git commit` with build leftovers or files over 1 MB staged | Large or generated files do not belong in the project's history. | `# allow-large-commit` |
+| `git commit` with build leftovers or files over 1 MB, staged or added in the same command | Large or generated files do not belong in the project's history. | `# allow-large-commit` |
 | `git checkout --theirs` / `--ours`, `git restore --theirs` / `--ours` | Keeps one whole side of a conflict and throws away the other side's changes. | `# allow-conflict-side` |
 | `git push --force` without `--force-with-lease` | Overwrites the remote copy, whatever is there. | `# allow-force-push` |
 
@@ -32,6 +32,7 @@ of a large file that belongs in the project.
 
 - `bash` and [`jq`](https://jqlang.org/download/).
 - Linux or macOS. It is written for both, but has only been tested on Linux. Windows is not covered.
+- The tests also need `git`, Python 3 and pytest.
 
 ## Install
 
@@ -51,15 +52,19 @@ Do this once after installing, in a test folder:
 2. The command should be refused with a message that starts `BLOCKED:`.
 
 If the command runs, the lock is off. The most common reason is that `jq` is missing: the lock then
-lets every command through and prints `jq not found, so this lock is OFF`. Install `jq` and check
-again.
+lets every command through, and Claude Code shows a hook error notice that says
+`jq not found, so this lock is OFF`. Install `jq` and check again.
 
 ## What it does not do
 
 - It fails open: if something unexpected goes wrong inside the script, the command is allowed. It
-  is a safety net, not a guarantee.
+  catches common mistakes; it cannot guarantee that a refused command never runs.
 - It only sees commands the agent runs through its shell tool. It does not see file edits.
-- It matches the command text. A command written in an unusual form may get past it.
+- It matches the command text. A command written in an unusual form may get past it, for example
+  `bash -c "git add -A"` or `/usr/bin/pkill`.
+- It does not size the contents of a folder named in `git add`, only files and folder names.
+- It can refuse a harmless command whose text contains a refused one, for example a commit message
+  that mentions `git add -A`. Reword the command, or add the override marker.
 
 Claude Code also has its own deny rules, which need no script, for example
 `"deny": ["Bash(git push *)"]` under `"permissions"` in the same settings file
